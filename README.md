@@ -7,6 +7,7 @@ This project classifies chest X-ray images using a modified ResNet-50 neural net
 - [Technologies](#technologies)
 - [Dataset description](#dataset-description)
 - [Data preprocessing](#data-preprocessing) 
+- [Proposed model](#proposed-model)
 - [Methodology](#methodology) 
 - [Results](#results) 
 - [Code style](#code-style)
@@ -29,7 +30,7 @@ The dataset was sourced from [Kaggle](https://www.kaggle.com/datasets/tawsifurra
 Researchers from Qatar University and University of Dhaka, along with their collaborators from Pakistan and Malaysia, 
 created this dataset of chest X-ray (CXR) images. 
 
-They released 3616 COVID, 6012 Lung Opacity, 10192 Normal, and 1345 Viral Pneumonia CXR images.
+They released 3616 COVID, 6012 Lung Opacity, 10192 Normal, and 1345 Viral Pneumonia CXRs, totaling 21265.
 
 <img height="400" src="figures/bar_chart.png" width="400"/><img height="400" src="figures/pie_chart.png" width="400"/>
 
@@ -42,50 +43,67 @@ Every image was PNG, grayscale, and 299 x 299 pixels.
 Images were processed using `tf.keras.applications.resnet50.preprocess_input`, which converts images from RGB to BGR 
 and then zero-centers each color channel with respect to the ImageNet dataset without scaling.
 
-In addition, real-time data augmentation was done via ImageDataGenerator.
-The table below summarizes the parameters used.
+In addition, real-time data augmentation was done. The table below details the parameters used.
 
-<img height="225" src="figures/aug_parameters_summary.png" width="680"/>
+<img height="180.5" src="figures/aug_parameters_summary.png" width="509"/>
 
-For visualization purposes, some augmented pictures were saved to the aug_images folder via the `save_to_dir` arg. 
-Below are a few of those images. 
+For visualization purposes, some augmented pictures were saved to the aug_images folder via the `save_to_dir` arg.
 
 <img height="160" src="aug_images\aug_809_465415.png" width="160"/><img height="160" src="aug_images\aug_6868_6483323.png" width="160"/><img height="160" src="aug_images\aug_7903_3196687.png" width="160"/><img height="160" src="aug_images\aug_9366_9241711.png" width="160"/><img height="160" src="aug_images\aug_4010_3591919.png" width="160"/>
 
+## Proposed model
+
+First, a ResNet-50 neural network model was implemented from scratch and 
+pre-trained ImageNet weights were loaded into it via transfer learning. 
+Next, bottleneck layers were added. The code block details the modifications. 
+
+```python
+x = base_model.output
+x = Conv2D(1024, 1)(x)
+x = BatchNormalization()(x)
+x = Activation('relu')(x)
+x = MaxPooling2D()(x)
+x = Flatten()(x)
+x = Dense(1024, activation='relu')(x)
+x = Dropout(0.2)(x)
+x = Dense(512, activation='relu')(x)
+x = Dropout(0.2)(x)
+x = Dense(256, activation='relu')(x)
+outputs = Dense(4, activation='softmax')(x)
+model = Model(base_model.input, outputs)
+```
+
+Then, the base model layers were frozen,
+rendering 2,755,332 trainable parameters and 23,587,712 non-trainable parameters.
+Below the red line are all the modifications.
+
+<img height="384.5.5" src="figures/model_summary.png" width="632.5"/>
+
 ## Methodology
 
-First, a ResNet-50 neural network model was implemented from scratch
-and pre-trained ImageNet weights were loaded into it via transfer learning.
-Next, bottleneck layers were added, namely a global average pooling layer and 3 fully connected layers, 
-containing 2048, 512, and 128 neurons respectively.
-Then, a fully connected layer with softmax classifier was added at the end. 
-Lastly, the base model layers were frozen, 
-rendering 5,311,620 trainable parameters and 23,587,712 non-trainable parameters.
+The table below summarizes the dataset partition details.
 
-After the model was built, it was fed batches of augmented images. 
+<img height="153" src="figures/dataset_partition.png" width="590"/>
+
+First, class weights were estimated for the unbalanced dataset.
+The model was then was fed batches of augmented images. 
 The images were in rgb mode and 224 x 224 in size for ImageNet compatibility reasons.
-The images were trained for 20 epochs with a learning rate of 0.0001.
-70% of the CXR images were used for testing, 10% for validating, and 20% for testing.
-
-|                    | **Training** | **Validation** | **Testing** |
-| ------------------ | ------------ | -------------- | ----------- |
-| **Number of CXRs** | 10124        | 1444           | 2896        |
+These images were trained for 25 epochs with a  learning rate of 0.0001. 
+The learning rate was lowered to 0.00001 for the last 5 epochs.
 
 ## Results
 
 ### Training Results
 
-<img height="300" src="figures/loss_training_results.png" width="400"/><img height="300" src="figures/accuracy_training_results.png" width="400"/>
-<img height="300" src="figures/precision_training_results.png" width="400"/><img height="300" src="figures/recall_training_results.png" width="400"/>
+<img height="300" src="figures/Loss.png" width="400"/> <img height="300" src="figures/Accuracy.png" width="400"/>
+<img height="300" src="figures/Precision.png" width="400"/> <img height="300" src="figures/Recall.png" width="400"/>
 
 ### Testing Results 
 
 After training, the test subset was evaluated. 
 The table below summarizes the metrics for the model in test mode.
 
-| Loss  | Accuracy | Precision | Recall |
-| ----- | -------- | --------- | ------ |
-| 0.207 | 0.928    | 0.933     | 0.926  |
+<img height="52.5" src="figures/test_results.png" width="473"/>
 
 Next, output predictions were generated for the test input samples. 
 These predictions were then compared to the true label values.
@@ -93,9 +111,9 @@ The classification report and confusion matrix below summarize the results.
 
 See `sklearn.metrics.classification_report` and `sklearn.metrics.ConfusionMatrixDisplay` for more details. 
 
-<img height="350" src="figures/classification_report.png" width="637"/>
+<img height="222.5" src="figures/classification_report.png" width="471.5"/>
 
-![](figures/confusion_matrix.png)
+<img height="533.3" src="figures/confusion_matrix.png" width="800"/>
 
 ## Code style
 
