@@ -117,6 +117,6 @@ Third party / library specific imports: matplotlib, numpy, IPython, PIL, sklearn
 
 ## Credits
 
-- https://www.kaggle.com/datasets/tawsifurrahman/covid19-radiography-database)
+- https://www.kaggle.com/datasets/tawsifurrahman/covid19-radiography-database
 - https://arxiv.org/pdf/1608.06993.pdf
 
