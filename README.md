@@ -4,7 +4,7 @@
 ![Custom badge](https://img.shields.io/badge/code%20style-PEP%208-brightgreen)
 ![Custom badge](https://img.shields.io/badge/docstring%20format-reStructuredText-brightgreen)
 
-This project classifies chest X-ray images with 94% accuracy using a customized DenseNet121 neural network model.
+This project classifies chest X-ray images using a customized DenseNet121 neural network model.
 
 ## Contents
 
@@ -31,8 +31,7 @@ This project classifies chest X-ray images with 94% accuracy using a customized 
 ## Dataset description
 
 This dataset was sourced from [Kaggle](https://www.kaggle.com/datasets/tawsifurrahman/covid19-radiography-database).
-Researchers from Qatar University and University of Dhaka, along with their collaborators from Pakistan and Malaysia,
-created this database of chest X-ray (CXR) images.
+Researchers from Qatar University and University of Dhaka created this database of chest X-ray images.
 
 They released 3616 COVID, 6012 Lung Opacity, 10192 Normal, and 1345 Viral Pneumonia CXR images.
 
