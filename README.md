@@ -1,8 +1,6 @@
 # :lungs: Chest-X-Ray Classification
 
-![Custom badge](https://img.shields.io/badge/repo%20size-765%20MB-blue)
 ![Custom badge](https://img.shields.io/badge/code%20style-PEP%208-brightgreen)
-![Custom badge](https://img.shields.io/badge/docstring%20format-reStructuredText-brightgreen)
 
 This project classifies chest X-ray images using a customized DenseNet121 neural network model.
 
@@ -24,16 +22,14 @@ This project classifies chest X-ray images using a customized DenseNet121 neural
 ![Keras](https://img.shields.io/badge/keras-%23D00000.svg?style=for-the-badge&logo=Keras&logoColor=white)
 ![Sklearn](https://img.shields.io/badge/scikit--learn-3498cb?style=for-the-badge&logo=scikit-learn&logoColor=f89a36)
 ![NumPy](https://img.shields.io/badge/numpy-013243?style=for-the-badge&logo=numpy&logoColor=white)
-![Cuda](https://img.shields.io/badge/cuda-282828?style=for-the-badge&logo=nvidia&logoColor=76b900)
 ![Jupyter](https://img.shields.io/badge/jupyter-222222?style=for-the-badge&logo=jupyter&logoColor=b84600)
 
 
 ## Dataset description
 
-This dataset was sourced from [Kaggle](https://www.kaggle.com/datasets/tawsifurrahman/covid19-radiography-database).
-Researchers from Qatar University and University of Dhaka created this database of chest X-ray images.
+This dataset of chest X-ray (CXR) images was sourced from [Kaggle](https://www.kaggle.com/datasets/tawsifurrahman/covid19-radiography-database).
 
-They released 3616 COVID, 6012 Lung Opacity, 10192 Normal, and 1345 Viral Pneumonia CXR images.
+It contains 3616 COVID, 6012 Lung Opacity, 10192 Normal, and 1345 Viral Pneumonia CXR images.
 
 <img height="400" src="figures/bar_chart.png" width="400"/><img height="400" src="figures/pie_chart.png" width="400"/>
 
@@ -44,9 +40,8 @@ Every image was PNG, grayscale, and 299 x 299 pixels.
 ## Data preprocessing
 
 Images were processed using `tf.keras.applications.resnet50.preprocess_input`, which converts images from RGB to BGR
-and then zero-centers each color channel with respect to the ImageNet dataset without scaling.
-
-The images were also resized to 224 x 224 for ImageNet compatibility reasons.
+and then zero-centers each color channel with respect to the ImageNet dataset without scaling. The images were also
+resized to 224 x 224 for ImageNet compatibility reasons.
 
 In addition, real-time data augmentation was done. The table below details the parameters used.
 
@@ -103,7 +98,7 @@ The learning rate was lowered to 1e-5 for the last 5 epochs.
 ### Testing Results
 
 Output predictions were generated for the test input samples
-and then compared to the true label values.
+and  compared to the true label values.
 
 See `sklearn.metrics.classification_report` and `sklearn.metrics.ConfusionMatrixDisplay` for more details.
 
@@ -112,7 +107,7 @@ See `sklearn.metrics.classification_report` and `sklearn.metrics.ConfusionMatrix
 
 ## Requirements
 
-Third party / library specific imports: matplotlib, numpy, IPython, PIL, sklearn, tensorflow
+Third party imports: matplotlib, numpy, IPython, PIL, sklearn, tensorflow, splitfolders
 
 ## Credits
 
